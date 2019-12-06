@@ -1,9 +1,12 @@
 package com.xmu.wowoto.payment.mapper;
 
+import com.xmu.wowoto.payment.domain.Payment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Mapper
 @Repository
-public class PaymentMapper {
+@Mapper
+public interface PaymentMapper {
+    int addPayment(Payment payment);
+    Payment findPayment(Integer id);
 }

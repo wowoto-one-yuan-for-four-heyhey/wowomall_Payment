@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xmu.wowoto.payment.mapper.AfterSaleMapper">
+
+    <select id="findPayment" parameterType="Integer" resultType="payment">
+        select *
+        from payment where id = #{id} and is_deleted = 0
+    </select>
+
+    <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
+        insert into payment(actual_price, pay_channel, is_successful, pay_time, pay_sn, begin_time, order_id, is_deleted,gmt_create,gmt_modified)
+        values (#{actualPrice},#{payChannel},#{isSuccessful},now(),#{paySn},now(),#{orderId},#{isDeleted},now(),now())  </insert>
+
+
+
+</mapper>
