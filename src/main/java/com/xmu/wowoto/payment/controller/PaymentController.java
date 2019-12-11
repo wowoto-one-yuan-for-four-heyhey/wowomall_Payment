@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("")
+@RestController
+@RequestMapping("")
 public class PaymentController {
 
     @Autowired
     PaymentService paymentService;
 
+    //order调过来
     @PostMapping("payments")
     @ApiOperation("下单，获取prepay_id等五个参数，进而鉴权调起支付")
     public Object addPayment(@RequestBody PaymentVO paymentVO){
@@ -21,9 +23,10 @@ public class PaymentController {
         payment.setActualPrice(paymentVO.getActualPrice());
         payment.setPayChannel(paymentVO.getPayChannel());
         payment.setOrderId(paymentVO.getOrderId());
-        //TODO:wx支付返回sn
-
-        payment.setPaySn("13213141adasd");
+        //调用wx统一支付api获得pay_sn
+        // TODO:wx支付返回sn
+        String paySn="test";
+        payment.setPaySn(paySn);
 
         return ResponseUtil.ok(paymentService.addPayment(payment));
     }
