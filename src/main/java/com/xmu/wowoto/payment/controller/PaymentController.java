@@ -1,5 +1,6 @@
 package com.xmu.wowoto.payment.controller;
 
+import com.xmu.wowoto.payment.controller.vo.PaymentVO;
 import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.util.ResponseUtil;
