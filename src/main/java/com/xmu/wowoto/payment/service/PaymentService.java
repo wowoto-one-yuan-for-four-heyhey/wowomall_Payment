@@ -19,8 +19,11 @@ public class PaymentService {
     public Payment addPayment(Payment payment){
         return paymentDao.addPayment(payment);
     }
-    public Payment updatePayment(String Sn){
+    public Integer findBySn(String Sn){
         Integer id=paymentDao.findBySn(Sn);
+        return id;
+    }
+    public Payment updatePayment(Integer id){
         return paymentDao.updatePayment(id);
     }
 }

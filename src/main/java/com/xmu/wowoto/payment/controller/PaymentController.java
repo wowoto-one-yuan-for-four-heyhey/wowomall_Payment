@@ -41,9 +41,9 @@ public class PaymentController {
      */
     @PutMapping("payments/{id}")
     public Object updatePayment(@PathVariable("id") String prepay_id){
-           // TODO:调用order模块的update模块修改订单状态
-
-        Payment payment=paymentService.updatePayment(prepay_id);
-       return ResponseUtil.ok(payment);
+        Integer id=paymentService.findBySn(prepay_id);
+        // TODO:调用order模块的update模块修改订单状态
+        Payment payment=paymentService.updatePayment(id);
+        return ResponseUtil.ok(payment);
     }
 }
