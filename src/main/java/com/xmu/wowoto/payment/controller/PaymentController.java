@@ -29,7 +29,7 @@ public class PaymentController {
         String paySn="test";
         payment.setPaySn(paySn);
 
-        return ResponseUtil.ok(paymentService.addPayment(payment));
+        return paymentService.addPayment(payment);
     }
 
     /**
@@ -44,6 +44,6 @@ public class PaymentController {
         Integer id=paymentService.findBySn(prepay_id);
         // TODO:调用order模块的update模块修改订单状态
         Payment payment=paymentService.updatePayment(id);
-        return ResponseUtil.ok(payment);
+        return payment;
     }
 }
