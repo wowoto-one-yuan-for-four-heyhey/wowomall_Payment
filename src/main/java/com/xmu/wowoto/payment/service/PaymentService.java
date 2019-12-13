@@ -4,12 +4,15 @@ import com.xmu.wowoto.payment.dao.PaymentDao;
 import com.xmu.wowoto.payment.domain.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public interface PaymentService {
 
-    public Payment addPayment(Payment payment);
-    public Payment updatePayment(Payment payment);
-    public Payment getPayment(Integer id);
-    public Payment getPaymentByPaySn(String paySn);
-    public Payment deletePayment(Integer id);
+    Payment addPayment(Payment payment);
+    Payment deletePayment(Integer id);
+    Payment updatePayment(Payment payment);
+    Payment getPayment(Integer id);
+    Payment getPaymentByPaySn(String paySn);
+    List<Payment> getAllPayments();
 
 }

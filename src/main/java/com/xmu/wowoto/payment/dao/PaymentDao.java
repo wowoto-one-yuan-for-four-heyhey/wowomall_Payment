@@ -5,6 +5,8 @@ import com.xmu.wowoto.payment.mapper.PaymentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class PaymentDao {
 
@@ -15,6 +17,10 @@ public class PaymentDao {
         paymentMapper.addPayment(payment);
 
         Integer id = payment.getId();
+        return paymentMapper.getPayment(id);
+    }
+    public Payment deletePayment(Integer id) {
+        paymentMapper.deletePayment(id);
         return paymentMapper.getPayment(id);
     }
     public Payment updatePayment(Payment payment){
@@ -31,13 +37,8 @@ public class PaymentDao {
         Payment payment = paymentMapper.getPaymentByPaySn(paySn);
         return payment;
     }
-
-
-    public Payment deletePayment(Integer id)
-    {
-        paymentMapper.deletePayment(id);
-        Payment pm=paymentMapper.getPayment(id);
-        return pm;
+    public List<Payment> getAllPayments(){
+        return paymentMapper.getAllPayments();
     }
 
 }
