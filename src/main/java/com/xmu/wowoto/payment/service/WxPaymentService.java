@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Service
 @FeignClient("wowoto-wxPayment")
 public interface WxPaymentService {
+
     @PostMapping("wxPayment")
     String addWxPayment(WxPaymentVo wxPaymentVo);
 

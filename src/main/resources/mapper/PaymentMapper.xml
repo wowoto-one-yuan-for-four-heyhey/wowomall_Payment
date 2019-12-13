@@ -2,9 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xmu.wowoto.payment.mapper.PaymentMapper">
 
+    <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
+        insert into payment(actual_price, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted,gmt_create,gmt_modified,end_time)
+        values (#{actualPrice}, #{isSuccessful}, now(), date_add(now(), interval 30 minute), #{orderId}, date_sub(now(), interval 8 hour), date_sub(now(), interval 8 hour), #{beDeleted})
+    </insert>
+
     <select id="findPayment" parameterType="Integer" resultType="payment">
         select *
-        from payment where id = #{id} and is_deleted = 0
+        from payment
+        where id = #{id} and is_deleted = 0
     </select>
 
     <select id="findPaymentBySn" parameterType="String" resultType="Integer">
@@ -12,9 +18,7 @@
         from payment where pay_sn = #{paySn} and is_deleted = 0
     </select>
 
-    <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into payment(actual_price, pay_channel, is_successful,pay_sn, begin_time, order_id, is_deleted,gmt_create,gmt_modified,end_time)
-        values (#{actualPrice},#{payChannel},false,#{paySn},now(),#{orderId},false,now(),now(),date_add(now(),interval 30 minute))  </insert>
+
 
     <update id="updatePayment" parameterType="Integer">
         update payment

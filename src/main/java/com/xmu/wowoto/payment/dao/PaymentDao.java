@@ -13,9 +13,9 @@ public class PaymentDao {
 
     public Payment addPayment(Payment payment) {
         paymentMapper.addPayment(payment);
-        Integer id=payment.getId();
-        Payment pm=paymentMapper.findPayment(id);
-        return pm;
+
+        Integer id = payment.getId();
+        return paymentMapper.findPayment(id);
     }
 
     public Payment findPayment(Integer id)

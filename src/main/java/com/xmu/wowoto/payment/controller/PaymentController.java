@@ -5,15 +5,13 @@ import com.xmu.wowoto.payment.controller.vo.PaymentVO;
 import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.util.ResponseUtil;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
 /**
- * @Author: MedalWill
+ * @Author: Zach
  * @Description:
- * @Date: 2019/12/12 21:04
+ * @Date: 2019/12/13 14:55
  */
 @RestController
 @RequestMapping("paymentService")
@@ -33,14 +31,24 @@ public class PaymentController {
      * @return OrderPaymentVo
      */
     @PostMapping("payment")
-    public Payment addPayment(@RequestBody OrderPo orderPo){
+    public Payment createPayment(@RequestBody OrderPo orderPo){
+        // addPayment
+
         Payment payment = new Payment();
         payment.setActualPrice(orderPo.getIntegralPrice());
         // payChannel
         payment.setSuccessful(false);
         // payTime
         // paySn
-        payment.setBeginTime();
+        /* beginTime */
+        /* endTime */
+        payment.setOrderId(orderPo.getId());
+        /* gmt_create */
+        /* gmt_modified */
+        payment.setBeDeleted(false);
+
+        Payment paymentWithId;
+        paymentWithId= paymentService.addPayment(payment);
 
     }
     //order调过来
