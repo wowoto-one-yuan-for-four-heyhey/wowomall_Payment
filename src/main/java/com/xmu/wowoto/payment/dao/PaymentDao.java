@@ -15,30 +15,29 @@ public class PaymentDao {
         paymentMapper.addPayment(payment);
 
         Integer id = payment.getId();
-        return paymentMapper.findPayment(id);
+        return paymentMapper.getPayment(id);
+    }
+    public Payment updatePayment(Payment payment){
+        paymentMapper.updatePayment(payment);
+
+        Integer id = payment.getId();
+        return paymentMapper.getPayment(id);
+    }
+    public Payment getPayment(Integer id) {
+        Payment payment = paymentMapper.getPayment(id);
+        return payment;
+    }
+    public Payment getPaymentByPaySn(String paySn){
+        Payment payment = paymentMapper.getPaymentByPaySn(paySn);
+        return payment;
     }
 
-    public Payment findPayment(Integer id)
-    {
-        Payment pm=paymentMapper.findPayment(id);
-        return pm;
-    }
 
-    public Payment updatePayment(Integer id)
-    {
-        paymentMapper.updatePayment(id);
-        Payment pm=paymentMapper.findPayment(id);
-        return pm;
-    }
     public Payment deletePayment(Integer id)
     {
         paymentMapper.deletePayment(id);
-        Payment pm=paymentMapper.findPayment(id);
+        Payment pm=paymentMapper.getPayment(id);
         return pm;
-    }
-    public Integer findBySn(String Sn)
-    {
-        return paymentMapper.findPaymentBySn(Sn);
     }
 
 }

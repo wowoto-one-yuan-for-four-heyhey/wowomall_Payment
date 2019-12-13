@@ -4,6 +4,7 @@ import com.xmu.wowoto.payment.controller.po.OrderPo;
 import com.xmu.wowoto.payment.controller.vo.PaymentVO;
 import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.PaymentService;
+import com.xmu.wowoto.payment.service.WxPaymentService;
 import com.xmu.wowoto.payment.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
+    @Autowired
+    WxPaymentService wxPaymentService;
+
     /**
      * 订单模块调用此方法请求下单支付
      * 此方法再调用WxPayment模块的unifiedWxPayment()方法（模拟微信统一支付api），unifiedWxPayment方法应该返回prepay_id等信息
@@ -28,10 +32,10 @@ public class PaymentController {
      * 确认其支付信息后，用户可以点击确认支付按钮调用WxPayment模块的RequestPayment()方法发起最终支付
      *
      * @param orderPo
-     * @return OrderPaymentVo
+     * @return Payment
      */
     @PostMapping("payment")
-    public Payment createPayment(@RequestBody OrderPo orderPo){
+    public Object createPayment(@RequestBody OrderPo orderPo){
         // addPayment
 
         Payment payment = new Payment();
@@ -48,39 +52,42 @@ public class PaymentController {
         payment.setBeDeleted(false);
 
         Payment paymentWithId;
-        paymentWithId= paymentService.addPayment(payment);
+        paymentWithId = paymentService.addPayment(payment);
 
-    }
-    //order调过来
-    @PostMapping("payments")
-    public Object addPayment(@RequestBody PaymentVO paymentVO){
-        Payment payment =new Payment();
-        payment.setActualPrice(paymentVO.getActualPrice());
-        payment.setPayChannel(paymentVO.getPayChannel());
-        payment.setOrderId(paymentVO.getOrderId());
-        //调用wx统一支付api获得pay_sn
-        // TODO:wx支付返回sn
-        String paySn="test";
-        payment.setPaySn(paySn);
+        String prepayId;
+        prepayId = wxPaymentService.useWxPay(paymentWithId);
 
-        return paymentService.addPayment(payment);
+        paymentWithId.setPaySn(prepayId);
+        Payment paymentWithIdAndPaySn;
+        paymentWithIdAndPaySn = paymentService.updatePayment(paymentWithId);
+
+        return ResponseUtil.ok(paymentWithIdAndPaySn);
     }
 
     /**
-     * 调用此方法去调用order模块的updateOrder方法，修改订单状态
-     * @param prePayId：预支付订单号
-     * @return
-     *  // TODO:调用order模块的update模块修改订单状态
-     *  return true;
+     * （模拟的）微信后台调用此方法修改订单状态
+     * 此方法还会调用order模块的updateOrder方法，修改订单状态
+     *
+     * @param prepay_id：预支付订单号
+     * @return Payment
      */
-    @PutMapping("payments/{id}")
-    public Object updatePayment(@PathVariable("id") String prePayId){
-        Integer id=paymentService.findBySn(prePayId);
-        if(id==null)
-        {
-            return ResponseUtil.fail(505,"数据不存在！");
+    @PutMapping("payment/{id}")
+    public Object updatePayment(@PathVariable("id") String prepay_id, Integer payChannel, boolean successfulPayment){
+        Payment payment = new Payment();
+        payment = paymentService.getPaymentByPaySn(prepay_id);
+        payment.setPayChannel(payChannel);
+        if(successfulPayment){
+            payment.setSuccessful(true);
         }
-        // TODO:调用order模块的update模块修改订单状态
-        return ResponseUtil.ok(paymentService.updatePayment(id));
+        else{
+            payment.setSuccessful(false);
+        }
+
+        Payment paymentUpdated;
+        paymentUpdated = paymentService.updatePayment(payment);
+
+        return ResponseUtil.ok(paymentUpdated);
+
     }
+
 }

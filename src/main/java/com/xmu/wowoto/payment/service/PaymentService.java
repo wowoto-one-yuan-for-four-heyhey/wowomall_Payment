@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public interface PaymentService {
 
     public Payment addPayment(Payment payment);
+    public Payment updatePayment(Payment payment);
     public Payment getPayment(Integer id);
+    public Payment getPaymentByPaySn(String paySn);
     public Payment deletePayment(Integer id);
-    public Integer findBySn(String Sn);
-    public Payment updatePayment(Integer id);
 
 }

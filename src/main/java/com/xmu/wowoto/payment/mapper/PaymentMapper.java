@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 public interface PaymentMapper {
 
     int addPayment(Payment payment);
-    Payment findPayment(Integer id);
-    int updatePayment(Integer id);
+    Payment getPayment(Integer id);
+    Payment getPaymentByPaySn(String paySn);
+    int updatePayment(Payment payment);
     int deletePayment(Integer id);
-    Integer findPaymentBySn(String paySn);
 
 }

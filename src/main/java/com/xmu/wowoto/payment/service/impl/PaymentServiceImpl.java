@@ -15,17 +15,18 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment addPayment(Payment payment){
         return paymentDao.addPayment(payment);
     }
-    public Payment getPayment(Integer id){
-        return paymentDao.findPayment(id);
+    public Payment updatePayment(Payment payment){
+        return paymentDao.updatePayment(payment);
     }
+    public Payment getPayment(Integer id){
+        return paymentDao.getPayment(id);
+    }
+    public Payment getPaymentByPaySn(String paySn){
+        return paymentDao.getPaymentByPaySn(paySn);
+    }
+
     public Payment deletePayment(Integer id){
         return paymentDao.deletePayment(id);
     }
-    public Integer findBySn(String Sn){
-        Integer id=paymentDao.findBySn(Sn);
-        return id;
-    }
-    public Payment updatePayment(Integer id){
-        return paymentDao.updatePayment(id);
-    }
+
 }
