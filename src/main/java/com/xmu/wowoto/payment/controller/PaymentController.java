@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+/**
+ * @Author: MedalWill
+ * @Description:
+ * @Date: 2019/12/12 21:04
+ */
 @RestController
 @RequestMapping("paymentService")
 public class PaymentController {
@@ -55,16 +60,19 @@ public class PaymentController {
 
     /**
      * 调用此方法去调用order模块的updateOrder方法，修改订单状态
-     * @param prepay_id：预支付订单号
+     * @param prePayId：预支付订单号
      * @return
      *  // TODO:调用order模块的update模块修改订单状态
      *  return true;
      */
     @PutMapping("payments/{id}")
-    public Object updatePayment(@PathVariable("id") String prepay_id){
-        Integer id=paymentService.findBySn(prepay_id);
+    public Object updatePayment(@PathVariable("id") String prePayId){
+        Integer id=paymentService.findBySn(prePayId);
+        if(id==null)
+        {
+            return ResponseUtil.fail(505,"数据不存在！");
+        }
         // TODO:调用order模块的update模块修改订单状态
-        Payment payment=paymentService.updatePayment(id);
-        return payment;
+        return ResponseUtil.ok(paymentService.updatePayment(id));
     }
 }

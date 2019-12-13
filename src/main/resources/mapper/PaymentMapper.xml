@@ -13,9 +13,8 @@
     </select>
 
     <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into payment(actual_price, pay_channel, is_successful, pay_sn, begin_time, order_id, is_deleted, gmt_create, gmt_modified)
-        values (#{actualPrice},#{payChannel},false,#{paySn},now(),#{orderId},false,now(),now())
-    </insert>
+        insert into payment(actual_price, pay_channel, is_successful,pay_sn, begin_time, order_id, is_deleted,gmt_create,gmt_modified,end_time)
+        values (#{actualPrice},#{payChannel},false,#{paySn},now(),#{orderId},false,now(),now(),date_add(now(),interval 30 minute))  </insert>
 
     <update id="updatePayment" parameterType="Integer">
         update payment
