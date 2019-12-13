@@ -1,5 +1,6 @@
 package com.xmu.wowoto.payment.controller;
 
+import com.xmu.wowoto.payment.controller.po.OrderPo;
 import com.xmu.wowoto.payment.controller.vo.PaymentVO;
 import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.PaymentService;
@@ -10,15 +11,35 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("paymentService")
 public class PaymentController {
 
     @Autowired
     PaymentService paymentService;
 
+    /**
+     * 订单模块调用此方法请求下单支付
+     * 此方法再调用WxPayment模块的unifiedWxPayment()方法（模拟微信统一支付api），unifiedWxPayment方法应该返回prepay_id等信息
+     * 此方法拿到prepay_id等信息后，需要修改数据库中payment表相应属性的属性值，如paySn等等
+     * 调用此方法后，前端应显示包括商户名称、订单总价、支付方式(等)信息的界面，供用户确认其支付信息
+     * 确认其支付信息后，用户可以点击确认支付按钮调用WxPayment模块的RequestPayment()方法发起最终支付
+     *
+     * @param orderPo
+     * @return OrderPaymentVo
+     */
+    @PostMapping("payment")
+    public Payment addPayment(@RequestBody OrderPo orderPo){
+        Payment payment = new Payment();
+        payment.setActualPrice(orderPo.getIntegralPrice());
+        // payChannel
+        payment.setSuccessful(false);
+        // payTime
+        // paySn
+        payment.setBeginTime();
+
+    }
     //order调过来
     @PostMapping("payments")
-    @ApiOperation("下单，获取prepay_id等五个参数，进而鉴权调起支付")
     public Object addPayment(@RequestBody PaymentVO paymentVO){
         Payment payment =new Payment();
         payment.setActualPrice(paymentVO.getActualPrice());

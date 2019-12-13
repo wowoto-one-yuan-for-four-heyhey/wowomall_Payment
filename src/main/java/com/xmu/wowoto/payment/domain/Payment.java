@@ -6,12 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * @Author: 数据库与对象模型标准组
- * @Description: 付款记录
- * @Date: Created in 16:00 2019/11/29
- * @Modified By:
- **/
 @Alias("payment")
 public class Payment {
     private Integer id;
@@ -51,36 +45,7 @@ public class Payment {
     private LocalDateTime gmtModified;
     private Boolean beDeleted;
 
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", actualPrice=" + actualPrice +
-                ", payChannel=" + payChannel +
-                ", isSuccessful=" + isSuccessful +
-                ", payTime=" + payTime +
-                ", paySn='" + paySn + '\'' +
-                ", beginTime=" + beginTime +
-                ", endTime=" + endTime +
-                ", orderId=" + orderId +
-                ", gmtCreate=" + gmtCreate +
-                ", gmtModified=" + gmtModified +
-                ", beDeleted=" + beDeleted +
-                '}';
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
-        Payment payment = (Payment) o;
-        return Objects.equals(id, payment.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     public Integer getId() {
         return id;
@@ -177,4 +142,40 @@ public class Payment {
     public void setBeDeleted(Boolean beDeleted) {
         this.beDeleted = beDeleted;
     }
+
+
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", actualPrice=" + actualPrice +
+                ", payChannel=" + payChannel +
+                ", isSuccessful=" + isSuccessful +
+                ", payTime=" + payTime +
+                ", paySn='" + paySn + '\'' +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", orderId=" + orderId +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                ", beDeleted=" + beDeleted +
+                '}';
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        Payment payment = (Payment) o;
+        return Objects.equals(id, payment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

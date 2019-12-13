@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Mapper
 public interface PaymentMapper {
+
     int addPayment(Payment payment);
     Payment findPayment(Integer id);
     int updatePayment(Integer id);
     int deletePayment(Integer id);
     Integer findPaymentBySn(String paySn);
+
 }
