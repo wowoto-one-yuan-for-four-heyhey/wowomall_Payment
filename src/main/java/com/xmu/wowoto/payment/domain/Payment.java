@@ -8,7 +8,13 @@ import org.apache.ibatis.type.Alias;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
+
+/**
+ *
+*@author MedalWill
+*@date 2019/12/14
+*
+*/
 
 @EqualsAndHashCode
 @ToString
@@ -28,7 +34,7 @@ public class Payment {
     /**
      * 是否付款成功,0不成功，1成功
      */
-    private Boolean isSuccessful;
+    private Boolean beSuccessful;
     /**
      * 付款时间
      */

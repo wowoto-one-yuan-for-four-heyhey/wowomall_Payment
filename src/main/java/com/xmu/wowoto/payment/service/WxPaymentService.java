@@ -12,7 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient("wowoto-wxPayment")
 public interface WxPaymentService {
 
+    /**
+     * 获取prepayId
+    *@author MedalWill
+    *@date 2019/12/14
+    *
+    *@param payment 对象
+    *@return prepayId
+    */
     @PostMapping("wxPaymentService/wxPayment")
-    public String useWxPay(Payment payment);
+    String useWxPay(Payment payment);
 
 }

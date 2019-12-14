@@ -5,40 +5,33 @@ import com.xmu.wowoto.payment.mapper.PaymentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+/**
+ * 
+*@author MedalWill
+*@date 2019/12/14
+*
+*/
 @Repository
 public class PaymentDao {
 
     @Autowired
     PaymentMapper paymentMapper;
 
-    public Payment addPayment(Payment payment) {
-        paymentMapper.addPayment(payment);
-
-        Integer id = payment.getId();
-        return paymentMapper.getPayment(id);
+    public Integer addPayment(Payment payment) {
+        return paymentMapper.addPayment(payment);
     }
-    public Payment deletePayment(Integer id) {
-        paymentMapper.deletePayment(id);
-        return paymentMapper.getPayment(id);
+    public Integer deletePayment(Integer id) {
+        return paymentMapper.deletePayment(id);
     }
-    public Payment updatePayment(Payment payment){
-        paymentMapper.updatePayment(payment);
-
-        Integer id = payment.getId();
-        return paymentMapper.getPayment(id);
+    public Integer updatePayment(Payment payment){
+        return paymentMapper.updatePayment(payment);
     }
     public Payment getPayment(Integer id) {
-        Payment payment = paymentMapper.getPayment(id);
-        return payment;
+        return paymentMapper.getPayment(id);
     }
     public Payment getPaymentByPaySn(String paySn){
-        Payment payment = paymentMapper.getPaymentByPaySn(paySn);
-        return payment;
-    }
-    public List<Payment> getAllPayments(){
-        return paymentMapper.getAllPayments();
+
+        return paymentMapper.getPaymentByPaySn(paySn);
     }
 
 }

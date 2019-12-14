@@ -6,8 +6,6 @@ import com.xmu.wowoto.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
@@ -15,15 +13,15 @@ public class PaymentServiceImpl implements PaymentService {
     PaymentDao paymentDao;
 
     @Override
-    public Payment addPayment(Payment payment){
+    public Integer addPayment(Payment payment){
         return paymentDao.addPayment(payment);
     }
     @Override
-    public Payment updatePayment(Payment payment){
+    public Integer updatePayment(Payment payment){
         return paymentDao.updatePayment(payment);
     }
     @Override
-    public Payment deletePayment(Integer id){
+    public Integer deletePayment(Integer id){
         return paymentDao.deletePayment(id);
     }
     @Override
@@ -34,7 +32,5 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentByPaySn(String paySn){
         return paymentDao.getPaymentByPaySn(paySn);
     }
-    @Override
-    public List<Payment> getAllPayments(){ return paymentDao.getAllPayments(); }
 
 }

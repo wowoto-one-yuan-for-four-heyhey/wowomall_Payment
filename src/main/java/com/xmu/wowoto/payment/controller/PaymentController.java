@@ -39,19 +39,11 @@ public class PaymentController {
      */
     @PostMapping("payment")
     public Object createPayment(@RequestBody OrderPo orderPo){
-        // addPayment
 
         Payment payment = new Payment();
         payment.setActualPrice(orderPo.getIntegralPrice());
-        // payChannel √
-        payment.setIsSuccessful(false);    // √
-        // payTime √
-        // paySn √
-        /* beginTime √ */
-        /* endTime √ */
+        payment.setBeSuccessful(false);
         payment.setOrderId(orderPo.getId());
-        /* gmt_create √ */
-        /* gmt_modified ! */
         payment.setBeDeleted(false);
 
         Payment paymentWithId;

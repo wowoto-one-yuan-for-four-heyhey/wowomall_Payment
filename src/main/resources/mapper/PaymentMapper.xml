@@ -3,8 +3,8 @@
 <mapper namespace="com.xmu.wowoto.payment.mapper.PaymentMapper">
 
     <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into payment(actual_price, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted)
-        values (#{actualPrice}, #{isSuccessful}, now(), date_add(now(), interval 30 minute), #{orderId}, now(), now(), #{beDeleted})
+        insert into payment(actual_price,pay_channel, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted)
+        values (#{actualPrice}, #{payChannel},0, now(), date_add(now(), interval 30 minute), #{orderId}, now(), now(), 0)
     </insert>
     <update id="deletePayment" parameterType="Integer">
         update payment
@@ -17,7 +17,6 @@
     <update id="updatePayment" parameterType="payment">
         update payment
         <set>
-            <if test="id != null">id=#{id}</if>
             <if test="actualPrice != null">actual_price=#{actualPrice}</if>
             <if test="payChannel != null">pay_channel=#{payChannel}</if>
             <if test="isSuccessful != null">is_successful=#{isSuccessful}</if>
@@ -25,30 +24,44 @@
 
             <if test="payTime != null">pay_time=#{payTime}</if>
             <if test="paySn != null">pay_sn=#{paySn}</if>
-            <if test="beginTime != null">begin_time=#{beginTime}</if>
-            <if test="endTime != null">end_time=#{endTime}</if>
-
-            <if test="orderId != null">order_id=#{orderId}</if>
-            <if test="gmtCreate != null">gmt_create=#{gmtCreate}</if>
-            gmt_modified = now(),
+             gmt_modified = now(),
             <if test="beDeleted != null">is_deleted=#{beDeleted}</if>
         </set>
         where id=#{id}
     </update>
     <select id="getPayment" parameterType="Integer" resultType="payment">
-        select *
+        select
+                id,
+               actual_price,
+               pay_channel,
+               is_successful as beSuccessful,
+               pay_time,
+               pay_sn,
+               begin_time,
+               end_time,
+               order_id,
+               is_deleted as beDeleted,
+               gmt_create,
+               gmt_modified
         from payment
         where id = #{id} and is_deleted = 0
     </select>
     <select id="getPaymentByPaySn" parameterType="String" resultType="payment">
-        select *
+        select
+            id,
+            actual_price,
+            pay_channel,
+            is_successful as beSuccessful,
+            pay_time,
+            pay_sn,
+            begin_time,
+            end_time,
+            order_id,
+            is_deleted as beDeleted,
+            gmt_create,
+            gmt_modified
         from payment
         where pay_sn = #{paySn} and is_deleted = 0
-    </select>
-    <select id="getAllPayments" resultType="payment">
-        select *
-        from payment
-        where is_deleted = 0
     </select>
 
 
