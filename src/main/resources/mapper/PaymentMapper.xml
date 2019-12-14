@@ -29,7 +29,7 @@
             <if test="endTime != null">end_time=#{endTime}</if>
 
             <if test="orderId != null">order_id=#{orderId}</if>
-            <if test="gmt_create != null">gmt_create=#{gmt_create}</if>
+            <if test="gmtCreate != null">gmt_create=#{gmtCreate}</if>
             gmt_modified = now(),
             <if test="beDeleted != null">is_deleted=#{beDeleted}</if>
         </set>

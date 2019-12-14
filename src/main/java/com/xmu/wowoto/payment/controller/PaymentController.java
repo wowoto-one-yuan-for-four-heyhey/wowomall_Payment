@@ -44,7 +44,7 @@ public class PaymentController {
         Payment payment = new Payment();
         payment.setActualPrice(orderPo.getIntegralPrice());
         // payChannel √
-        payment.setSuccessful(false);    // √
+        payment.setIsSuccessful(false);    // √
         // payTime √
         // paySn √
         /* beginTime √ */
@@ -58,7 +58,8 @@ public class PaymentController {
         paymentWithId = paymentService.addPayment(payment);
 
         String prepayId;
-        prepayId = wxPaymentService.useWxPay(paymentWithId);
+        //prepayId = wxPaymentService.useWxPay(paymentWithId);
+        prepayId="sdsad12313";
 
         paymentWithId.setPaySn(prepayId);
         Payment paymentWithIdAndPaySn;
@@ -80,10 +81,10 @@ public class PaymentController {
         payment = paymentService.getPaymentByPaySn(prepayId);
         payment.setPayChannel(payChannel);
         if(successfulPayment){
-            payment.setSuccessful(true);
+            payment.setIsSuccessful(true);
         }
         else{
-            payment.setSuccessful(false);
+            payment.setIsSuccessful(false);
         }
         payment.setPayTime(LocalDateTime.now());
 
