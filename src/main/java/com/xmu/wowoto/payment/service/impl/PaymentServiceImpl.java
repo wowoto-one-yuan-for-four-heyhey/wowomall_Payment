@@ -6,6 +6,12 @@ import com.xmu.wowoto.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ *
+*@author MedalWill
+*@date 2019/12/15 15:50
+*
+*/
 @Service
 public class PaymentServiceImpl implements PaymentService {
 

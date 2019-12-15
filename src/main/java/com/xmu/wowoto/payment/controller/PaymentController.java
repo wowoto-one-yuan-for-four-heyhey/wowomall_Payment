@@ -1,7 +1,7 @@
 package com.xmu.wowoto.payment.controller;
 
-import com.xmu.wowoto.payment.controller.po.OrderPo;
 import com.xmu.wowoto.payment.domain.Payment;
+import com.xmu.wowoto.payment.service.OrderService;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.service.WxPaymentService;
 import com.xmu.wowoto.payment.util.ResponseUtil;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * PaymentController
@@ -27,6 +26,9 @@ public class PaymentController {
     @Autowired
     WxPaymentService wxPaymentService;
 
+    @Autowired
+    OrderService orderService;
+
     /**
      * 订单模块调用此方法请求下单支付
      * 此方法再调用WxPayment模块的unifiedWxPayment()方法（模拟微信统一支付api），unifiedWxPayment方法应该返回prepay_id等信息
@@ -34,30 +36,32 @@ public class PaymentController {
      * 调用此方法后，前端应显示包括商户名称、订单总价、支付方式(等)信息的界面，供用户确认其支付信息
      * 确认其支付信息后，用户可以点击确认支付按钮调用WxPayment模块的RequestPayment()方法发起最终支付
      *
-     * @param orderPo 订单POJO
+     * @param inPayment 订单POJO
      * @return Payment
      */
     @PostMapping("payment")
-    public Object createPayment(@RequestBody OrderPo orderPo){
+    public Object createPayment(@RequestBody Payment inPayment){
 
         Payment payment = new Payment();
-        payment.setActualPrice(orderPo.getIntegralPrice());
-        payment.setBeSuccessful(false);
-        payment.setOrderId(orderPo.getId());
-        payment.setBeDeleted(false);
-
-        Payment paymentWithId;
-        paymentWithId = paymentService.addPayment(payment);
+        payment.setActualPrice(inPayment.getActualPrice());
+        payment.setOrderId(inPayment.getOrderId());
+        payment.setPayChannel(inPayment.getPayChannel());
 
         String prepayId;
-        //prepayId = wxPaymentService.useWxPay(paymentWithId);
-        prepayId="sdsad12313";
+        prepayId = wxPaymentService.useWxPay(payment);
+        payment.setPaySn(prepayId);
 
-        paymentWithId.setPaySn(prepayId);
-        Payment paymentWithIdAndPaySn;
-        paymentWithIdAndPaySn = paymentService.updatePayment(paymentWithId);
+        Integer result=paymentService.addPayment(payment);
 
-        return ResponseUtil.ok(paymentWithIdAndPaySn);
+        if(result==0){return ResponseUtil.updatedDataFailed();}
+
+        Payment ret=paymentService.getPayment(payment.getId());
+
+        if(ret==null)
+        {
+            return ResponseUtil.updatedDateExpired();
+        }
+        return ResponseUtil.ok(ret);
     }
 
     /**
@@ -68,61 +72,26 @@ public class PaymentController {
      * @return Payment
      */
     @PutMapping("payment/{id}")
-    public Object updatePayment(@PathVariable("id") String prepayId, Integer payChannel, boolean successfulPayment){
-        Payment payment = new Payment();
-        payment = paymentService.getPaymentByPaySn(prepayId);
-        payment.setPayChannel(payChannel);
+    public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment){
+        Payment payment = paymentService.getPaymentByPaySn(prepayId);
         if(successfulPayment){
-            payment.setIsSuccessful(true);
+            payment.setBeSuccessful(true);
         }
         else{
-            payment.setIsSuccessful(false);
+            payment.setBeSuccessful(false);
         }
         payment.setPayTime(LocalDateTime.now());
 
-        Payment paymentUpdated;
-        paymentUpdated = paymentService.updatePayment(payment);
+        Integer result=paymentService.updatePayment(payment);
 
-        return ResponseUtil.ok(paymentUpdated);
+        if(result==0){return ResponseUtil.updatedDataFailed();}
+
+        Payment ret=paymentService.getPayment(payment.getId());
+
+        orderService.updateOrderStatus(ret.getOrderId());
+
+        return ResponseUtil.ok(ret);
     }
 
-    /**
-     * 管理员删除支付（好像没什么用？）
-     *
-     * @param paymentId 支付Id
-     * @return Payment
-     */
-    @DeleteMapping("admin/payment/{id}")
-    public Object adminDeletePayment(@PathVariable("id") Integer paymentId){
-        Payment paymentDeleted;
-        paymentDeleted = paymentService.deletePayment(paymentId);
-        return ResponseUtil.ok(paymentDeleted);
-    }
-
-    /**
-     * 管理员查看所有支付（用户好像不用看？）
-     *
-     * @param
-     * @return List<GetPaymentVo>
-     */
-    @GetMapping("admin/payment")
-    public Object adminGetAllPayments(){
-        List<Payment> listPayment;
-        listPayment = paymentService.getAllPayments();
-        return ResponseUtil.ok(listPayment);
-    }
-
-    /**
-     * 管理员查看某个支付（用户好像不用看？）
-     *
-     * @param paymentId
-     * @return GetPaymentVo
-     */
-    @GetMapping("admin/payment/{id}")
-    public Object adminGetAllPayments(@PathVariable("id") Integer paymentId){
-        Payment payment = new Payment();
-        payment = paymentService.getPayment(paymentId);
-        return ResponseUtil.ok(payment);
-    }
 
 }

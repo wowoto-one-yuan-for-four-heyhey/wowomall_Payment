@@ -3,11 +3,11 @@
 <mapper namespace="com.xmu.wowoto.payment.mapper.PaymentMapper">
 
     <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into payment(actual_price,pay_channel, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted)
+        insert into oomall_payment(actual_price,pay_channel, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted)
         values (#{actualPrice}, #{payChannel},0, now(), date_add(now(), interval 30 minute), #{orderId}, now(), now(), 0)
     </insert>
     <update id="deletePayment" parameterType="Integer">
-        update payment
+        update oomall_payment
         <trim prefix="set" suffixOverrides=",">
             <if test="true">gmt_modified=now(),</if>
             <if test="true">is_deleted=1</if>
@@ -15,7 +15,7 @@
         WHERE id=#{id}
     </update>
     <update id="updatePayment" parameterType="payment">
-        update payment
+        update oomall_payment
         <set>
             <if test="actualPrice != null">actual_price=#{actualPrice}</if>
             <if test="payChannel != null">pay_channel=#{payChannel}</if>
@@ -43,7 +43,7 @@
                is_deleted as beDeleted,
                gmt_create,
                gmt_modified
-        from payment
+        from oomall_payment
         where id = #{id} and is_deleted = 0
     </select>
     <select id="getPaymentByPaySn" parameterType="String" resultType="payment">
@@ -60,7 +60,7 @@
             is_deleted as beDeleted,
             gmt_create,
             gmt_modified
-        from payment
+        from oomall_payment
         where pay_sn = #{paySn} and is_deleted = 0
     </select>
 
