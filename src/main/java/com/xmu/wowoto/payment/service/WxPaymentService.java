@@ -45,10 +45,10 @@ public interface WxPaymentService {
      * 当传入payment模块addPayment方法的参数payment的actualPrice属性为负时，addPayment代表退款操作
      * 此时，addPayment方法调用wxPayment模块的refund方法，传入paySn和actualPrice（退款金额）执行退款操作
      * 该方法与requestWxPayment类似，应调用updatePayment方法，进而调用updateOrder方法，修改相应的（多个）表状态
-     *
-     * @param prepayId 预支付标识
-     * @param actualPrice 退款金额
-     * @return WxPayment
+     * @param refundWhom 先前支付的paysn
+     * @param refundPaymentPaySn 当前退款的paysn
+     * @param actualPrice 退库啊价格
+     * @return
      */
     @PutMapping("wxpayment/{id}/refund")
     public Object refund(@PathVariable String refundWhom, String refundPaymentPaySn, BigDecimal actualPrice);

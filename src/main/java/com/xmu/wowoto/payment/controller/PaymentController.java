@@ -46,20 +46,11 @@ public class PaymentController {
             payment.setActualPrice(inPayment.getActualPrice());
             payment.setOrderId(inPayment.getOrderId());
             payment.setPayChannel(inPayment.getPayChannel());
-
-            String prepayId;
-            prepayId = wxPaymentService.useWxPay(payment);
-            payment.setPaySn(prepayId);
-
             Integer paymentId = paymentService.addPayment(payment);
             if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
 
             Payment retPayment = paymentService.getPayment(payment.getId());
             if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
-
-            // 至此，完成创建订单操作
-            // 调用wxPayment模块requestWxPayment方法
-            Object wxPayment = wxPaymentService.requestWxPayment(retPayment.getPaySn(), retPayment.getEndTime());
 
             return ResponseUtil.ok(retPayment);
         }
@@ -104,13 +95,41 @@ public class PaymentController {
     }
 
     /**
-     * （模拟的）微信后台调用此方法修改订单状态
-     * 此方法还会调用order模块的updateOrder方法，修改订单状态
      *
-     * @param prepayId：预支付订单号
-     * @return Payment
+     * @param paymentId
+     * @return
      */
     @PutMapping("payment/{id}")
+    public Object payPayment(@PathVariable("id") Integer paymentId){
+        Payment payment;
+        payment = paymentService.getPayment(paymentId);
+
+        String prepayId;
+        prepayId = wxPaymentService.useWxPay(payment);
+        payment.setPaySn(prepayId);
+
+        Integer retPaymentId = paymentService.updatePayment(payment);
+        if(retPaymentId == 0){return ResponseUtil.updatedDataFailed();}
+
+        Payment retPayment = paymentService.getPayment(payment.getId());
+        if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
+
+        // 至此，完成创建订单操作
+        // 调用wxPayment模块requestWxPayment方法
+        Object wxPayment = wxPaymentService.requestWxPayment(retPayment.getPaySn(), retPayment.getEndTime());
+
+        return ResponseUtil.ok(retPayment);
+    }
+
+    /**
+     * （模拟的）微信后台调用此方法修改订单状态
+     * 此方法还会调用order模块的updateOrder方法，修改订单状态
+     * @param prepayId 预支付标识
+     * @param successfulPayment 成功
+     * @param operationType 操作类型：支付还是退款
+     * @return
+     */
+    @PutMapping("payment/{id}/status")
     public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment, String operationType){
         Payment payment = paymentService.getPaymentByPaySn(prepayId);
         if(successfulPayment){
@@ -130,6 +149,13 @@ public class PaymentController {
         orderService.updateOrderStatus(ret.getOrderId(), operationType);
 
         return ResponseUtil.ok(ret);
+    }
+
+    @GetMapping("payment/{id}")
+    public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
+        Payment payment = paymentService.getPaymentByOrderId(orderId);
+        if(payment == null) { return ResponseUtil.updatedDateExpired(); }
+        return ResponseUtil.ok(payment);
     }
 
 }
