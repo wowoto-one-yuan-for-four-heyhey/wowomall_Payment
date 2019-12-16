@@ -17,5 +17,6 @@ public interface PaymentService {
     Integer updatePayment(Payment payment);
     Payment getPayment(Integer id);
     Payment getPaymentByPaySn(String paySn);
+    Payment getPaymentByOrderId(Integer orderId);
 
 }

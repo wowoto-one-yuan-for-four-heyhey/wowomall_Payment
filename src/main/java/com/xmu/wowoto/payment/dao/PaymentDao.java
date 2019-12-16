@@ -29,9 +29,9 @@ public class PaymentDao {
     public Payment getPayment(Integer id) {
         return paymentMapper.getPayment(id);
     }
-    public Payment getPaymentByPaySn(String paySn){
-
-        return paymentMapper.getPaymentByPaySn(paySn);
+    public Payment getPaymentByPaySn(String paySn){ return paymentMapper.getPaymentByPaySn(paySn); }
+    public Payment getPaymentByOrderId(Integer orderId){
+        return paymentMapper.getPaymentByOrderId(orderId);
     }
 
 }

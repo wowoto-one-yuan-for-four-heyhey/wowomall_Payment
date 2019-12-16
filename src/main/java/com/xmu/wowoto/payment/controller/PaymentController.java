@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
  * PaymentController
  *
  * @author Zach
- * @date 2019/12/13
  */
 @RestController
 @RequestMapping("paymentService")
@@ -42,26 +41,66 @@ public class PaymentController {
     @PostMapping("payment")
     public Object createPayment(@RequestBody Payment inPayment){
 
-        Payment payment = new Payment();
-        payment.setActualPrice(inPayment.getActualPrice());
-        payment.setOrderId(inPayment.getOrderId());
-        payment.setPayChannel(inPayment.getPayChannel());
+        if (inPayment.getActualPrice().intValue() >= 0){
+            Payment payment = new Payment();
+            payment.setActualPrice(inPayment.getActualPrice());
+            payment.setOrderId(inPayment.getOrderId());
+            payment.setPayChannel(inPayment.getPayChannel());
 
-        String prepayId;
-        prepayId = wxPaymentService.useWxPay(payment);
-        payment.setPaySn(prepayId);
+            String prepayId;
+            prepayId = wxPaymentService.useWxPay(payment);
+            payment.setPaySn(prepayId);
 
-        Integer result=paymentService.addPayment(payment);
+            Integer paymentId = paymentService.addPayment(payment);
+            if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
 
-        if(result==0){return ResponseUtil.updatedDataFailed();}
+            Payment retPayment = paymentService.getPayment(payment.getId());
+            if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
 
-        Payment ret=paymentService.getPayment(payment.getId());
+            // 至此，完成创建订单操作
+            // 调用wxPayment模块requestWxPayment方法
+            Object wxPayment = wxPaymentService.requestWxPayment(retPayment.getPaySn(), retPayment.getEndTime());
 
-        if(ret==null)
-        {
-            return ResponseUtil.updatedDateExpired();
+            return ResponseUtil.ok(retPayment);
         }
-        return ResponseUtil.ok(ret);
+        else{
+            // 如果actualPrice < 0, 则此次方法调用为退款调用
+            Payment payment = new Payment();
+            // id: 由数据库自动生成
+            payment.setActualPrice(inPayment.getActualPrice());
+            // payChannel
+            Integer tempOrderId = inPayment.getOrderId();
+            Payment tempPayment = paymentService.getPaymentByOrderId(tempOrderId);
+            Integer tempPayChannel = tempPayment.getPayChannel();
+            payment.setPayChannel(tempPayChannel);
+            // beSuccessful: 由数据库创建，若退款成功，refund方法调用updatePayment方法，updatePayment方法对其更新
+
+            // payTime: wxpayment模块的refund()函数调用payment模块的updatePayment()方法修改
+            // orderId:
+            payment.setOrderId(tempOrderId);
+            // paySn
+            String prepayId = wxPaymentService.useWxPay(payment);
+            payment.setPaySn(prepayId);
+            // beginTime: 由数据库创建
+            // endTime: 由数据库创建
+
+            // gmtCreate: 由数据库创建
+            // gmtModified: 由数据库创建
+            // beDeleted: 由数据库创建
+
+            Integer paymentId = paymentService.addPayment(payment);
+            if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
+
+            Payment retPayment = paymentService.getPayment(payment.getId());
+            if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
+
+            // 至此，完成创建订单操作
+            // 调用wxPayment模块refund方法
+            Object wxPayment = wxPaymentService.refund(tempPayment.getPaySn(), retPayment.getPaySn(), retPayment.getActualPrice());
+
+            return ResponseUtil.ok(retPayment);
+        }
+
     }
 
     /**
@@ -72,7 +111,7 @@ public class PaymentController {
      * @return Payment
      */
     @PutMapping("payment/{id}")
-    public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment){
+    public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment, String operationType){
         Payment payment = paymentService.getPaymentByPaySn(prepayId);
         if(successfulPayment){
             payment.setBeSuccessful(true);
@@ -88,10 +127,9 @@ public class PaymentController {
 
         Payment ret=paymentService.getPayment(payment.getId());
 
-        orderService.updateOrderStatus(ret.getOrderId());
+        orderService.updateOrderStatus(ret.getOrderId(), operationType);
 
         return ResponseUtil.ok(ret);
     }
-
 
 }

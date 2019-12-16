@@ -38,5 +38,9 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment getPaymentByPaySn(String paySn){
         return paymentDao.getPaymentByPaySn(paySn);
     }
+    @Override
+    public Payment getPaymentByOrderId(Integer OrderId){
+        return paymentDao.getPaymentByOrderId(OrderId);
+    }
 
 }

@@ -63,6 +63,23 @@
         from oomall_payment
         where pay_sn = #{paySn} and is_deleted = 0
     </select>
+    <select id="getPaymentByOrderId" parameterType="Integer" resultType="payment">
+        select
+        id,
+        actual_price,
+        pay_channel,
+        is_successful as beSuccessful,
+        pay_time,
+        pay_sn,
+        begin_time,
+        end_time,
+        order_id,
+        is_deleted as beDeleted,
+        gmt_create,
+        gmt_modified
+        from oomall_payment
+        where order_id = #{orderId} and actualPrice > 0 and is_deleted = 0
+    </select>
 
 
 

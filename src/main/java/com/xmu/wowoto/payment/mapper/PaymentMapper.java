@@ -53,6 +53,15 @@ public interface PaymentMapper {
     *@return Payment对象
     */
     Payment getPaymentByPaySn(String paySn);
+    /**
+     * 根据支付标识获取支付
+     *@author MedalWill
+     *@date 2019/12/14
+     *
+     *@param orderId 订单标识
+     *@return Payment对象
+     */
+    Payment getPaymentByOrderId(Integer orderId);
 
 
 }

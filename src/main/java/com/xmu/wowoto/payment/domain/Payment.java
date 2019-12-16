@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 @Getter
 @Alias("payment")
 public class Payment {
+
     private Integer id;
     /**
      * 付款金额
