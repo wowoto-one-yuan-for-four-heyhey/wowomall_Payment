@@ -2,6 +2,8 @@ package com.xmu.wowoto.payment.service;
 
 import com.xmu.wowoto.payment.domain.Payment;
 
+import java.util.List;
+
 /**
  *
 *@author MedalWill
@@ -17,6 +19,6 @@ public interface PaymentService {
     Integer updatePayment(Payment payment);
     Payment getPayment(Integer id);
     Payment getPaymentByPaySn(String paySn);
-    Payment getPaymentByOrderId(Integer orderId);
+    List<Payment> getPaymentByOrderId(Integer orderId);
 
 }

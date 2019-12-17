@@ -6,6 +6,8 @@ import com.xmu.wowoto.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *
 *@author MedalWill
@@ -39,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentDao.getPaymentByPaySn(paySn);
     }
     @Override
-    public Payment getPaymentByOrderId(Integer OrderId){
+    public List<Payment> getPaymentByOrderId(Integer OrderId){
         return paymentDao.getPaymentByOrderId(OrderId);
     }
 

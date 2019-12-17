@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * PaymentController
@@ -46,6 +47,10 @@ public class PaymentController {
             payment.setActualPrice(inPayment.getActualPrice());
             payment.setOrderId(inPayment.getOrderId());
             payment.setPayChannel(inPayment.getPayChannel());
+            payment.setBeginTime(inPayment.getBeginTime());
+            payment.setEndTime(inPayment.getEndTime());
+            String prepayId = wxPaymentService.useWxPay(payment);
+            payment.setPaySn(prepayId);
             Integer paymentId = paymentService.addPayment(payment);
             if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
 
@@ -61,7 +66,20 @@ public class PaymentController {
             payment.setActualPrice(inPayment.getActualPrice());
             // payChannel
             Integer tempOrderId = inPayment.getOrderId();
-            Payment tempPayment = paymentService.getPaymentByOrderId(tempOrderId);
+            List<Payment> tempPaymentList = paymentService.getPaymentByOrderId(tempOrderId);
+            int tempPaymentListSize;
+            tempPaymentListSize = tempPaymentList.size();
+            Payment tempPayment = new Payment();
+            if(tempPaymentListSize == 1){
+                tempPayment = tempPaymentList.get(0);
+            }
+            if(tempPaymentListSize == 2){
+                if(tempPaymentList.get(0).getBeginTime().isBefore(tempPaymentList.get(1).getBeginTime())){
+                    tempPayment = tempPaymentList.get(1);
+                }
+                else
+                    tempPayment = tempPaymentList.get(0);
+            }
             Integer tempPayChannel = tempPayment.getPayChannel();
             payment.setPayChannel(tempPayChannel);
             // beSuccessful: 由数据库创建，若退款成功，refund方法调用updatePayment方法，updatePayment方法对其更新
@@ -72,6 +90,8 @@ public class PaymentController {
             // paySn
             String prepayId = wxPaymentService.useWxPay(payment);
             payment.setPaySn(prepayId);
+            payment.setPayChannel(inPayment.getPayChannel());
+            payment.setBeginTime(inPayment.getBeginTime());
             // beginTime: 由数据库创建
             // endTime: 由数据库创建
 
@@ -104,21 +124,13 @@ public class PaymentController {
         Payment payment;
         payment = paymentService.getPayment(paymentId);
 
-        String prepayId;
-        prepayId = wxPaymentService.useWxPay(payment);
-        payment.setPaySn(prepayId);
-
-        Integer retPaymentId = paymentService.updatePayment(payment);
-        if(retPaymentId == 0){return ResponseUtil.updatedDataFailed();}
-
-        Payment retPayment = paymentService.getPayment(payment.getId());
-        if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
+        if(payment == null) { return ResponseUtil.updatedDateExpired(); }
 
         // 至此，完成创建订单操作
         // 调用wxPayment模块requestWxPayment方法
-        Object wxPayment = wxPaymentService.requestWxPayment(retPayment.getPaySn(), retPayment.getEndTime());
+        Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
 
-        return ResponseUtil.ok(retPayment);
+        return ResponseUtil.ok(payment);
     }
 
     /**
@@ -153,9 +165,9 @@ public class PaymentController {
 
     @GetMapping("payment/{id}")
     public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
-        Payment payment = paymentService.getPaymentByOrderId(orderId);
-        if(payment == null) { return ResponseUtil.updatedDateExpired(); }
-        return ResponseUtil.ok(payment);
+        List<Payment> paymentList = paymentService.getPaymentByOrderId(orderId);
+        if(paymentList == null) { return ResponseUtil.updatedDateExpired(); }
+        return ResponseUtil.ok(paymentList);
     }
 
 }

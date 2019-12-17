@@ -5,6 +5,8 @@ import com.xmu.wowoto.payment.mapper.PaymentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 
 *@author MedalWill
@@ -30,7 +32,7 @@ public class PaymentDao {
         return paymentMapper.getPayment(id);
     }
     public Payment getPaymentByPaySn(String paySn){ return paymentMapper.getPaymentByPaySn(paySn); }
-    public Payment getPaymentByOrderId(Integer orderId){
+    public List<Payment> getPaymentByOrderId(Integer orderId){
         return paymentMapper.getPaymentByOrderId(orderId);
     }
 

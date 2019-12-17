@@ -4,6 +4,8 @@ import com.xmu.wowoto.payment.domain.Payment;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 @Mapper
@@ -61,7 +63,7 @@ public interface PaymentMapper {
      *@param orderId 订单标识
      *@return Payment对象
      */
-    Payment getPaymentByOrderId(Integer orderId);
+    List<Payment> getPaymentByOrderId(Integer orderId);
 
 
 }
