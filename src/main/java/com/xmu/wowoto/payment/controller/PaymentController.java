@@ -5,11 +5,13 @@ import com.xmu.wowoto.payment.service.OrderService;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.service.WxPaymentService;
 import com.xmu.wowoto.payment.util.ResponseUtil;
+import org.apache.catalina.util.RequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 /**
  * PaymentController
@@ -49,6 +51,7 @@ public class PaymentController {
             payment.setPayChannel(inPayment.getPayChannel());
             payment.setBeginTime(inPayment.getBeginTime());
             payment.setEndTime(inPayment.getEndTime());
+
             String prepayId = wxPaymentService.useWxPay(payment);
             payment.setPaySn(prepayId);
             Integer paymentId = paymentService.addPayment(payment);
@@ -77,8 +80,9 @@ public class PaymentController {
                 if(tempPaymentList.get(0).getBeginTime().isBefore(tempPaymentList.get(1).getBeginTime())){
                     tempPayment = tempPaymentList.get(1);
                 }
-                else
+                else {
                     tempPayment = tempPaymentList.get(0);
+                }
             }
             Integer tempPayChannel = tempPayment.getPayChannel();
             payment.setPayChannel(tempPayChannel);
@@ -88,6 +92,7 @@ public class PaymentController {
             // orderId:
             payment.setOrderId(tempOrderId);
             // paySn
+
             String prepayId = wxPaymentService.useWxPay(payment);
             payment.setPaySn(prepayId);
             payment.setPayChannel(inPayment.getPayChannel());
@@ -108,28 +113,26 @@ public class PaymentController {
             // 至此，完成创建订单操作
             // 调用wxPayment模块refund方法
             Object wxPayment = wxPaymentService.refund(tempPayment.getPaySn(), retPayment.getPaySn(), retPayment.getActualPrice());
-
+            /* order */
             return ResponseUtil.ok(retPayment);
         }
 
     }
 
-    /**
+    /**prepayId
      *
      * @param paymentId
      * @return
      */
     @PutMapping("payment/{id}")
     public Object payPayment(@PathVariable("id") Integer paymentId){
-        Payment payment;
-        payment = paymentService.getPayment(paymentId);
-
+        Payment payment = paymentService.getPayment(paymentId);
         if(payment == null) { return ResponseUtil.updatedDateExpired(); }
-
         // 至此，完成创建订单操作
         // 调用wxPayment模块requestWxPayment方法
-        Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
 
+        Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
+        /*wxPaymentService.requestWxPayment 这个模块存在问题*/
         return ResponseUtil.ok(payment);
     }
 
@@ -152,12 +155,11 @@ public class PaymentController {
         }
         payment.setPayTime(LocalDateTime.now());
 
-        Integer result=paymentService.updatePayment(payment);
+        Integer result = paymentService.updatePayment(payment);
 
         if(result==0){return ResponseUtil.updatedDataFailed();}
-
-        Payment ret=paymentService.getPayment(payment.getId());
-
+        Payment ret = paymentService.getPayment(payment.getId());
+        /* order updateOrderStatus 还没上线 */
         orderService.updateOrderStatus(ret.getOrderId(), operationType);
 
         return ResponseUtil.ok(ret);
@@ -166,7 +168,11 @@ public class PaymentController {
     @GetMapping("payment/{id}")
     public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
         List<Payment> paymentList = paymentService.getPaymentByOrderId(orderId);
-        if(paymentList == null) { return ResponseUtil.updatedDateExpired(); }
+        if(orderId <= 0){
+            return ResponseUtil.badArgument();
+        }
+        if(paymentList.size() == 0) { return ResponseUtil.updatedDateExpired(); }
+
         return ResponseUtil.ok(paymentList);
     }
 

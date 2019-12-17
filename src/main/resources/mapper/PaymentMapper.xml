@@ -3,8 +3,8 @@
 <mapper namespace="com.xmu.wowoto.payment.mapper.PaymentMapper">
 
     <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_payment(actual_price,pay_channel, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted)
-        values (#{actualPrice}, #{payChannel},0, #{beginTime}, date_add(#{beginTime}, interval 30 minute), #{orderId}, now(), now(), 0)
+        insert into oomall_payment(actual_price,pay_channel, is_successful, begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted,pay_sn)
+        values (#{actualPrice}, #{payChannel},0, #{beginTime}, date_add(#{beginTime}, interval 30 minute), #{orderId}, now(), now(), 0,#{paySn})
     </insert>
     <update id="deletePayment" parameterType="Integer">
         update oomall_payment
@@ -17,13 +17,11 @@
     <update id="updatePayment" parameterType="payment">
         update oomall_payment
         <set>
-            <if test="actualPrice != null">actual_price=#{actualPrice}</if>
-            <if test="payChannel != null">pay_channel=#{payChannel}</if>
-            <if test="isSuccessful != null">is_successful=#{isSuccessful}</if>
-
-
-            <if test="payTime != null">pay_time=#{payTime}</if>
-            <if test="paySn != null">pay_sn=#{paySn}</if>
+            <if test="actualPrice != null">actual_price=#{actualPrice},</if>
+            <if test="payChannel != null">pay_channel=#{payChannel},</if>
+            <if test="beSuccessful != null">is_successful=#{beSuccessful}, </if>
+            <if test="payTime != null">pay_time=#{payTime},</if>
+            <if test="paySn != null">pay_sn=#{paySn},</if>
              gmt_modified = now(),
             <if test="beDeleted != null">is_deleted=#{beDeleted}</if>
         </set>
@@ -78,7 +76,7 @@
         gmt_create,
         gmt_modified
         from oomall_payment
-        where order_id = #{orderId} and actualPrice > 0 and is_deleted = 0
+        where order_id = #{orderId} and actual_price > 0 and is_deleted = 0
     </select>
 
 

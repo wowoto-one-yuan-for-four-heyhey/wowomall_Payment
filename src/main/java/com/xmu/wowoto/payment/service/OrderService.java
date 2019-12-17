@@ -2,7 +2,6 @@ package com.xmu.wowoto.payment.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
  * @date 2019/12/14 21:13
  */
 @Service
-@FeignClient("Order")
+@FeignClient("orderService")
 public interface OrderService {
     
 /**

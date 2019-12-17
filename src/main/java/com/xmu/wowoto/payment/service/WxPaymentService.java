@@ -2,9 +2,7 @@ package com.xmu.wowoto.payment.service;
 
 import com.xmu.wowoto.payment.domain.Payment;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
  * @author Zach
  * @date 2019/12/13 16:38
  */
-@FeignClient("wowoto-wxPayment")
+@FeignClient("wxPaymentService")
 public interface WxPaymentService {
 
     /**
@@ -25,7 +23,7 @@ public interface WxPaymentService {
     *@param payment 对象
     *@return prepayId
     */
-    @PostMapping("wxPaymentService/wxPayment")
+    @PostMapping("wxPayment")
     String useWxPay(Payment payment);
 
     /**
@@ -37,8 +35,9 @@ public interface WxPaymentService {
      * @param endTime 支付结束时间
      * @return
      */
+
     @PutMapping("wxpayment/{id}")
-    public Object requestWxPayment(@PathVariable("id") String prepay_id, LocalDateTime endTime);
+    Object requestWxPayment(@PathVariable("id") String prepay_id, LocalDateTime endTime);
 
     /**
      * 退款
@@ -50,6 +49,8 @@ public interface WxPaymentService {
      * @param actualPrice 退库啊价格
      * @return
      */
+
     @PutMapping("wxpayment/{id}/refund")
-    public Object refund(@PathVariable String refundWhom, String refundPaymentPaySn, BigDecimal actualPrice);
+    Object refund(@PathVariable("id") @RequestParam String refundWhom,
+                  @RequestParam String refundPaymentPaySn, @RequestParam BigDecimal actualPrice);
 }
