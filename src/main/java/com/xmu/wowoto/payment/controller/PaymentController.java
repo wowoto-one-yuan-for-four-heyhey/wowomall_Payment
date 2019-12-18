@@ -55,10 +55,10 @@ public class PaymentController {
             String prepayId = wxPaymentService.useWxPay(payment);
             payment.setPaySn(prepayId);
             Integer paymentId = paymentService.addPayment(payment);
-            if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
+            if(paymentId == 0){return ResponseUtil.addPaymentFailed();}
 
             Payment retPayment = paymentService.getPayment(payment.getId());
-            if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
+            if(retPayment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
 
             return ResponseUtil.ok(retPayment);
         }
@@ -105,10 +105,10 @@ public class PaymentController {
             // beDeleted: 由数据库创建
 
             Integer paymentId = paymentService.addPayment(payment);
-            if(paymentId == 0){return ResponseUtil.updatedDataFailed();}
+            if(paymentId == 0){return ResponseUtil.addPaymentFailed();}
 
             Payment retPayment = paymentService.getPayment(payment.getId());
-            if(retPayment == null) { return ResponseUtil.updatedDateExpired(); }
+            if(retPayment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
 
             // 至此，完成创建订单操作
             // 调用wxPayment模块refund方法
@@ -127,7 +127,7 @@ public class PaymentController {
     @PutMapping("payment/{id}")
     public Object payPayment(@PathVariable("id") Integer paymentId){
         Payment payment = paymentService.getPayment(paymentId);
-        if(payment == null) { return ResponseUtil.updatedDateExpired(); }
+        if(payment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
         // 至此，完成创建订单操作
         // 调用wxPayment模块requestWxPayment方法
 
@@ -157,7 +157,7 @@ public class PaymentController {
 
         Integer result = paymentService.updatePayment(payment);
 
-        if(result==0){return ResponseUtil.updatedDataFailed();}
+        if(result==0){return ResponseUtil.updatePaymentFailed();}
         Payment ret = paymentService.getPayment(payment.getId());
         /* order updateOrderStatus 还没上线 */
         orderService.updateOrderStatus(ret.getOrderId(), operationType);
@@ -169,9 +169,9 @@ public class PaymentController {
     public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
         List<Payment> paymentList = paymentService.getPaymentByOrderId(orderId);
         if(orderId <= 0){
-            return ResponseUtil.badArgument();
+            return ResponseUtil.invalidOrderId();
         }
-        if(paymentList.size() == 0) { return ResponseUtil.updatedDateExpired(); }
+        if(paymentList.size() == 0) { return ResponseUtil.getPaymentsByOrderIdFailed(); }
 
         return ResponseUtil.ok(paymentList);
     }

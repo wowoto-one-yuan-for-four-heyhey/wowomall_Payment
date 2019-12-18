@@ -98,5 +98,11 @@ public class ResponseUtil {
     public static Object unauthz() {
         return fail(506, "无操作权限");
     }
+
+    public static Object addPaymentFailed(){return fail(620,"创建payment失败");}
+    public static Object updatePaymentFailed(){return fail(621,"修改payment失败");}
+    public static Object getPaymentByPaymentIdFailed(){return fail(622,"根据paymentId获取payment失败");}
+    public static Object invalidOrderId(){return fail(623,"orderId参数不合法");}
+    public static Object getPaymentsByOrderIdFailed(){return fail(624,"未查找到任何orderId对应的payment");}
 }
 
