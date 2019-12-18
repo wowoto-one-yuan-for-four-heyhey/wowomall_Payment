@@ -134,6 +134,7 @@ public class PaymentController {
         Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
         /*wxPaymentService.requestWxPayment 这个模块存在问题*/
         return ResponseUtil.ok(payment);
+
     }
 
     /**
