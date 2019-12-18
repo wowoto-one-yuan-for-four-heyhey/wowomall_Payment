@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
  * @author MedalWill
  * @date 2019/12/14 21:13
  */
-@Service
+
 @FeignClient("orderService")
 public interface OrderService {
     

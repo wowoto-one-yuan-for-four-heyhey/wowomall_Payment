@@ -147,12 +147,6 @@ public class PaymentController {
     @PutMapping("payment/{id}/status")
     public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment, String operationType){
         Payment payment = paymentService.getPaymentByPaySn(prepayId);
-        if(successfulPayment){
-            payment.setBeSuccessful(true);
-        }
-        else{
-            payment.setBeSuccessful(false);
-        }
         payment.setPayTime(LocalDateTime.now());
 
         Integer result = paymentService.updatePayment(payment);

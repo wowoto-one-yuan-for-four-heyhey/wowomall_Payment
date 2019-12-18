@@ -19,7 +19,6 @@
         <set>
             <if test="actualPrice != null">actual_price=#{actualPrice},</if>
             <if test="payChannel != null">pay_channel=#{payChannel},</if>
-            <if test="beSuccessful != null">is_successful=#{beSuccessful}, </if>
             <if test="payTime != null">pay_time=#{payTime},</if>
             <if test="paySn != null">pay_sn=#{paySn},</if>
              gmt_modified = now(),
@@ -32,7 +31,6 @@
                 id,
                actual_price,
                pay_channel,
-               is_successful as beSuccessful,
                pay_time,
                pay_sn,
                begin_time,
@@ -49,7 +47,6 @@
             id,
             actual_price,
             pay_channel,
-            is_successful as beSuccessful,
             pay_time,
             pay_sn,
             begin_time,
@@ -66,7 +63,6 @@
         id,
         actual_price,
         pay_channel,
-        is_successful as beSuccessful,
         pay_time,
         pay_sn,
         begin_time,

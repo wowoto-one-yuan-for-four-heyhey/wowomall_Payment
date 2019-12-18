@@ -11,12 +11,6 @@ class PaymentApplicationTests {
 
     @Test
     void contextLoads() {
-
-        Integer length = 8;
-        String len = " ";
-        for(int i = 0 ;i < length ;i++) {
-            len += new Random().ints(105);
-        }
     }
 
 }

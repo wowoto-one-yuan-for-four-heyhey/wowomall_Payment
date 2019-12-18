@@ -1,19 +1,16 @@
 package com.xmu.wowoto.payment.domain;
 
-import org.apache.ibatis.type.Alias;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- *
-*@author MedalWill
-*@date 2019/12/14
-*
-*/
-
-@Alias("payment")
+ * @Author: 数据库与对象模型标准组
+ * @Description: 付款记录
+ * @Date: Created in 16:00 2019/12/11
+ **/
 public class Payment {
+
+
 
     private Integer id;
     /**
@@ -25,9 +22,9 @@ public class Payment {
      */
     private Integer payChannel;
     /**
-     * 是否付款成功,0不成功，1成功
+     * 付款状态,0未支付，1成功，2失败
      */
-    private Boolean beSuccessful;
+    private Integer statusCode;
     /**
      * 付款时间
      */
@@ -64,8 +61,8 @@ public class Payment {
         return this.payChannel;
     }
 
-    public Boolean getBeSuccessful() {
-        return this.beSuccessful;
+    public Integer getStatusCode() {
+        return this.statusCode;
     }
 
     public LocalDateTime getPayTime() {
@@ -112,8 +109,8 @@ public class Payment {
         this.payChannel = payChannel;
     }
 
-    public void setBeSuccessful(Boolean beSuccessful) {
-        this.beSuccessful = beSuccessful;
+    public void setStatusCode(Integer statusCode) {
+        this.statusCode = statusCode;
     }
 
     public void setPayTime(LocalDateTime payTime) {
@@ -164,9 +161,9 @@ public class Payment {
         final Object other$payChannel = other.getPayChannel();
         if (this$payChannel == null ? other$payChannel != null : !this$payChannel.equals(other$payChannel))
             return false;
-        final Object this$beSuccessful = this.getBeSuccessful();
-        final Object other$beSuccessful = other.getBeSuccessful();
-        if (this$beSuccessful == null ? other$beSuccessful != null : !this$beSuccessful.equals(other$beSuccessful))
+        final Object this$statusCode = this.getStatusCode();
+        final Object other$statusCode = other.getStatusCode();
+        if (this$statusCode == null ? other$statusCode != null : !this$statusCode.equals(other$statusCode))
             return false;
         final Object this$payTime = this.getPayTime();
         final Object other$payTime = other.getPayTime();
@@ -209,8 +206,8 @@ public class Payment {
         result = result * PRIME + ($actualPrice == null ? 43 : $actualPrice.hashCode());
         final Object $payChannel = this.getPayChannel();
         result = result * PRIME + ($payChannel == null ? 43 : $payChannel.hashCode());
-        final Object $beSuccessful = this.getBeSuccessful();
-        result = result * PRIME + ($beSuccessful == null ? 43 : $beSuccessful.hashCode());
+        final Object $statusCode = this.getStatusCode();
+        result = result * PRIME + ($statusCode == null ? 43 : $statusCode.hashCode());
         final Object $payTime = this.getPayTime();
         result = result * PRIME + ($payTime == null ? 43 : $payTime.hashCode());
         final Object $paySn = this.getPaySn();
@@ -231,6 +228,6 @@ public class Payment {
     }
 
     public String toString() {
-        return "Payment(id=" + this.getId() + ", actualPrice=" + this.getActualPrice() + ", payChannel=" + this.getPayChannel() + ", beSuccessful=" + this.getBeSuccessful() + ", payTime=" + this.getPayTime() + ", paySn=" + this.getPaySn() + ", beginTime=" + this.getBeginTime() + ", endTime=" + this.getEndTime() + ", orderId=" + this.getOrderId() + ", gmtCreate=" + this.getGmtCreate() + ", gmtModified=" + this.getGmtModified() + ", beDeleted=" + this.getBeDeleted() + ")";
+        return "Payment(id=" + this.getId() + ", actualPrice=" + this.getActualPrice() + ", payChannel=" + this.getPayChannel() + ", statusCode=" + this.getStatusCode() + ", payTime=" + this.getPayTime() + ", paySn=" + this.getPaySn() + ", beginTime=" + this.getBeginTime() + ", endTime=" + this.getEndTime() + ", orderId=" + this.getOrderId() + ", gmtCreate=" + this.getGmtCreate() + ", gmtModified=" + this.getGmtModified() + ", beDeleted=" + this.getBeDeleted() + ")";
     }
 }
