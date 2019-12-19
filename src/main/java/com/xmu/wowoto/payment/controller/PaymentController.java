@@ -4,14 +4,13 @@ import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.OrderService;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.service.WxPaymentService;
+import com.xmu.wowoto.payment.util.JacksonUtil;
 import com.xmu.wowoto.payment.util.ResponseUtil;
-import org.apache.catalina.util.RequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 /**
  * PaymentController
@@ -52,8 +51,9 @@ public class PaymentController {
             payment.setBeginTime(inPayment.getBeginTime());
             payment.setEndTime(inPayment.getEndTime());
 
-            String prepayId = wxPaymentService.useWxPay(payment);
+            String prepayId = JacksonUtil.parseString(wxPaymentService.useWxPay(payment),"data");
             payment.setPaySn(prepayId);
+
             Integer paymentId = paymentService.addPayment(payment);
             if(paymentId == 0){return ResponseUtil.addPaymentFailed();}
 
@@ -68,11 +68,15 @@ public class PaymentController {
             // id: 由数据库自动生成
             payment.setActualPrice(inPayment.getActualPrice());
             // payChannel
-            Integer tempOrderId = inPayment.getOrderId();
-            List<Payment> tempPaymentList = paymentService.getPaymentByOrderId(tempOrderId);
+            Integer OrderId = inPayment.getOrderId();
+
+            List<Payment> tempPaymentList = paymentService.getPaymentByOrderId(OrderId);
             int tempPaymentListSize;
             tempPaymentListSize = tempPaymentList.size();
-            Payment tempPayment = new Payment();
+            Payment tempPayment=new Payment();
+            if(tempPaymentListSize==0){
+                ResponseUtil.fail();
+            }
             if(tempPaymentListSize == 1){
                 tempPayment = tempPaymentList.get(0);
             }
@@ -84,13 +88,12 @@ public class PaymentController {
                     tempPayment = tempPaymentList.get(0);
                 }
             }
-            Integer tempPayChannel = tempPayment.getPayChannel();
-            payment.setPayChannel(tempPayChannel);
+            payment.setPayChannel(tempPayment.getPayChannel());
             // beSuccessful: 由数据库创建，若退款成功，refund方法调用updatePayment方法，updatePayment方法对其更新
 
             // payTime: wxpayment模块的refund()函数调用payment模块的updatePayment()方法修改
             // orderId:
-            payment.setOrderId(tempOrderId);
+            payment.setOrderId(OrderId);
             // paySn
 
             String prepayId = wxPaymentService.useWxPay(payment);
@@ -104,8 +107,8 @@ public class PaymentController {
             // gmtModified: 由数据库创建
             // beDeleted: 由数据库创建
 
-            Integer paymentId = paymentService.addPayment(payment);
-            if(paymentId == 0){return ResponseUtil.addPaymentFailed();}
+            Integer ret1 = paymentService.addPayment(payment);
+            if(ret1 == 0){return ResponseUtil.addPaymentFailed();}
 
             Payment retPayment = paymentService.getPayment(payment.getId());
             if(retPayment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
@@ -155,17 +158,19 @@ public class PaymentController {
         if(result==0){return ResponseUtil.updatePaymentFailed();}
         Payment ret = paymentService.getPayment(payment.getId());
         /* order updateOrderStatus 还没上线 */
-        orderService.updateOrderStatus(ret.getOrderId(), operationType);
+        String pay="pay";
+        if(operationType.equals(pay))
+        {orderService.updateOrderStatus(ret.getOrderId());}
 
         return ResponseUtil.ok(ret);
     }
 
     @GetMapping("payment/{id}")
     public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
-        List<Payment> paymentList = paymentService.getPaymentByOrderId(orderId);
         if(orderId <= 0){
             return ResponseUtil.invalidOrderId();
         }
+        List<Payment> paymentList = paymentService.getPaymentByOrderId(orderId);
         if(paymentList.size() == 0) { return ResponseUtil.getPaymentsByOrderIdFailed(); }
 
         return ResponseUtil.ok(paymentList);

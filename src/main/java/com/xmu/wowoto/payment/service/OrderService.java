@@ -21,5 +21,5 @@ public interface OrderService {
 *@return Object(OrderPo+ok)
 */
     @PutMapping("order/{id}")
-    Object updateOrderStatus(@PathVariable("id") Integer id, String operationType);
+    Object updateOrderStatus(@PathVariable("id") Integer id);
 }
