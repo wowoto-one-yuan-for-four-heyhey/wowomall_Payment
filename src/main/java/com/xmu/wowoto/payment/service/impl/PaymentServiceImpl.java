@@ -3,9 +3,13 @@ package com.xmu.wowoto.payment.service.impl;
 import com.xmu.wowoto.payment.dao.PaymentDao;
 import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.PaymentService;
+import com.xmu.wowoto.payment.util.RedisUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,10 +22,19 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
+    RedisUtil redisUtil;
+
+    @Autowired
     PaymentDao paymentDao;
 
     @Override
     public Integer addPayment(Payment payment){
+        Integer id=payment.getOrderId();
+        String key=id.toString();
+        LocalDateTime endtime=payment.getEndTime();
+        Duration duration= Duration.between(LocalDateTime.now(),endtime);
+        long time=duration.toMillis();
+        redisUtil.addpayment(key,time);
         return paymentDao.addPayment(payment);
     }
     @Override

@@ -39,6 +39,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         Integer key=Integer.parseInt(expiredKey);
         Integer orderId=paymentService.getOrderIdByPaymentId(key);
         orderService.updateOrderStatus(orderId);
+        paymentService.deletePayment(key);
 
         }
     }
