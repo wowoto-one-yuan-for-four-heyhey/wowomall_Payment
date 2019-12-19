@@ -65,5 +65,5 @@ public interface PaymentMapper {
      */
     List<Payment> getPaymentByOrderId(Integer orderId);
 
-
+    Integer getOrderIdByPaymentId(Integer id);
 }

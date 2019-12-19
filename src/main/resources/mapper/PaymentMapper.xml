@@ -74,6 +74,12 @@
         from oomall_payment
         where order_id = #{orderId} and actual_price > 0 and is_deleted = 0
     </select>
+    <select id="getOrderIdByPaymentId" parameterType="Integer" resultType="payment">
+        select
+            order_id
+        from oomall_payment
+        where id = #{id} and actual_price > 0 and is_deleted = 0
+    </select>
 
 
 
