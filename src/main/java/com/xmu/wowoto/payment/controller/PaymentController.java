@@ -122,23 +122,23 @@ public class PaymentController {
 
     }
 
-    /**prepayId
-     *
-     * @param paymentId
-     * @return
-     */
-    @PutMapping("payment/{id}")
-    public Object payPayment(@PathVariable("id") Integer paymentId){
-        Payment payment = paymentService.getPayment(paymentId);
-        if(payment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
-        // 至此，完成创建订单操作
-        // 调用wxPayment模块requestWxPayment方法
-
-        Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
-        /*wxPaymentService.requestWxPayment 这个模块存在问题*/
-        return ResponseUtil.ok(payment);
-
-    }
+//    /**prepayId
+//     *
+//     * @param paymentId
+//     * @return
+//     */
+//    @PutMapping("payment/{id}")
+//    public Object payPayment(@PathVariable("id") Integer paymentId){
+//        Payment payment = paymentService.getPayment(paymentId);
+//        if(payment == null) { return ResponseUtil.getPaymentByPaymentIdFailed(); }
+//        // 至此，完成创建订单操作
+//        // 调用wxPayment模块requestWxPayment方法
+//
+//        Object wxPayment = wxPaymentService.requestWxPayment(payment.getPaySn(), payment.getEndTime());
+//        /*wxPaymentService.requestWxPayment 这个模块存在问题*/
+//        return ResponseUtil.ok(payment);
+//
+//    }
 
     /**
      * （模拟的）微信后台调用此方法修改订单状态
