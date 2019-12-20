@@ -3,8 +3,8 @@
 <mapper namespace="com.xmu.wowoto.payment.mapper.PaymentMapper">
 
     <insert id="addPayment" parameterType="payment" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_payment(actual_price,pay_channel,  begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted,pay_sn)
-        values (#{actualPrice}, #{payChannel}, #{beginTime}, date_add(#{beginTime}, interval 30 minute), #{orderId}, now(), now(), 0,#{paySn})
+        insert into oomall_payment(actual_price,pay_channel,  begin_time, end_time, order_id, gmt_create, gmt_modified, is_deleted,pay_sn,status)
+        values (#{actualPrice}, #{payChannel}, #{beginTime}, date_add(#{beginTime}, interval 30 minute), #{orderId}, now(), now(), 0,#{paySn},#{statusCode})
     </insert>
     <update id="deletePayment" parameterType="Integer">
         update oomall_payment
@@ -36,6 +36,7 @@
                begin_time,
                end_time,
                order_id,
+               status as status_code,
                is_deleted as beDeleted,
                gmt_create,
                gmt_modified
@@ -52,6 +53,7 @@
             begin_time,
             end_time,
             order_id,
+            status as status_code,
             is_deleted as beDeleted,
             gmt_create,
             gmt_modified
@@ -68,6 +70,7 @@
         begin_time,
         end_time,
         order_id,
+        status as status_code,
         is_deleted as beDeleted,
         gmt_create,
         gmt_modified
