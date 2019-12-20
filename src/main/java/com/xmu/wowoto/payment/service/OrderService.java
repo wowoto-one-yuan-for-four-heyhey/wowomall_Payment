@@ -20,6 +20,10 @@ public interface OrderService {
 *@param  id 订单id
 *@return Object(OrderPo+ok)
 */
-    @PutMapping("order/{id}")
+    @PutMapping("orders/{id}/paymentStatus")
     Object updateOrderStatus(@PathVariable("id") Integer id);
+
+    @PutMapping("orders/{id}/autoCancellation")
+    Object autoCancel(@PathVariable Integer id);
+
 }

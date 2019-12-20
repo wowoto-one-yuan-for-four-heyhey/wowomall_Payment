@@ -29,13 +29,17 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Integer addPayment(Payment payment){
-        Integer id=payment.getOrderId();
+        Integer result=paymentDao.addPayment(payment);
+        if(result!=0)
+        {Integer id=payment.getId();
         String key=id.toString();
         LocalDateTime endtime = payment.getEndTime();
         Duration duration= Duration.between(LocalDateTime.now(),endtime);
         long time=duration.toMillis();
         redisUtil.addpayment(key,time);
-        return paymentDao.addPayment(payment);
+        return 1;}
+        else
+        {return 0;}
     }
     @Override
     public Integer updatePayment(Payment payment){
