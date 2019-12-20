@@ -5,7 +5,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -23,7 +22,7 @@ public interface WxPaymentService {
     *@param payment 对象
     *@return prepayId
     */
-    @PostMapping("wxPayment")
+    @PostMapping("wxpayment")
     String useWxPay(Payment payment);
 
     /**

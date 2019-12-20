@@ -18,7 +18,7 @@ import java.util.List;
  * @author Zach
  */
 @RestController
-@RequestMapping("paymentService")
+@RequestMapping("")
 public class PaymentController {
 
     @Autowired
@@ -42,7 +42,11 @@ public class PaymentController {
      */
     @PostMapping("payment")
     public Object createPayment(@RequestBody Payment inPayment){
-
+        if(inPayment.getActualPrice()==null||inPayment.getOrderId()==null||
+                inPayment.getPayChannel()==null||inPayment.getBeginTime()==null||inPayment.getEndTime()==null)
+        {
+            return ResponseUtil.badArgument();
+        }
         if (inPayment.getActualPrice().intValue() >= 0){
             Payment payment = new Payment();
             payment.setActualPrice(inPayment.getActualPrice());
@@ -152,6 +156,7 @@ public class PaymentController {
     public Object updatePayment(@PathVariable("id") String prepayId, boolean successfulPayment, String operationType){
         Payment payment = paymentService.getPaymentByPaySn(prepayId);
         payment.setPayTime(LocalDateTime.now());
+        payment.setStatusCode(1);
 
         Integer result = paymentService.updatePayment(payment);
 
