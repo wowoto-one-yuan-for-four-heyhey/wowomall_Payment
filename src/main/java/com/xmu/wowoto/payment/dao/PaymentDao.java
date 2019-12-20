@@ -33,5 +33,4 @@ public class PaymentDao {
     }
     public Payment getPaymentByPaySn(String paySn){ return paymentMapper.getPaymentByPaySn(paySn); }
     public List<Payment> getPaymentByOrderId(Integer orderId){ return paymentMapper.getPaymentByOrderId(orderId); }
-    public Integer getOrderIdByPaymentId(Integer paymentId){return paymentMapper.getOrderIdByPaymentId(paymentId);}
 }

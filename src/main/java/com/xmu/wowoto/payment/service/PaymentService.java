@@ -20,6 +20,4 @@ public interface PaymentService {
     Payment getPayment(Integer id);
     Payment getPaymentByPaySn(String paySn);
     List<Payment> getPaymentByOrderId(Integer orderId);
-    Integer getOrderIdByPaymentId(Integer paymentId);
-
 }

@@ -57,6 +57,4 @@ public class PaymentServiceImpl implements PaymentService {
     public List<Payment> getPaymentByOrderId(Integer OrderId){
         return paymentDao.getPaymentByOrderId(OrderId);
     }
-    @Override
-    public Integer getOrderIdByPaymentId(Integer paymentId) {return paymentDao.getOrderIdByPaymentId(paymentId);}
 }

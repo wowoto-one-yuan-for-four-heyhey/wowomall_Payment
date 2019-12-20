@@ -165,6 +165,15 @@ public class PaymentController {
         return ResponseUtil.ok(ret);
     }
 
+    @PutMapping("payment/{id}")
+    public Object payPayment(@PathVariable("id") Integer id)
+    {
+        Payment payment=paymentService.getPayment(id);
+        String paySn=payment.getPaySn();
+        wxPaymentService.requestWxPayment(paySn);
+        return ResponseUtil.ok();
+    }
+
     @GetMapping("payment/{id}")
     public Object getPaymentByOrderId(@PathVariable("id") Integer orderId){
         if(orderId <= 0){

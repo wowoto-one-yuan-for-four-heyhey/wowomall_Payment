@@ -1,5 +1,6 @@
 package com.xmu.wowoto.payment.util;
 
+import com.xmu.wowoto.payment.domain.Payment;
 import com.xmu.wowoto.payment.service.OrderService;
 import com.xmu.wowoto.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,8 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
         String expiredKey = message.toString();
         System.out.println(expiredKey);
         Integer key=Integer.parseInt(expiredKey);
-        Integer orderId=paymentService.getOrderIdByPaymentId(key);
+        Payment payment=paymentService.getPayment(key);
+        Integer orderId=payment.getOrderId();
         orderService.updateOrderStatus(orderId);
         paymentService.deletePayment(key);
 
