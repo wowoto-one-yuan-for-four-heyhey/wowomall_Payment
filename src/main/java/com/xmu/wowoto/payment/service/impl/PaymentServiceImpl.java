@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     public Integer addPayment(Payment payment){
         Integer id=payment.getOrderId();
         String key=id.toString();
-        LocalDateTime endtime=payment.getEndTime();
+        LocalDateTime endtime = payment.getEndTime();
         Duration duration= Duration.between(LocalDateTime.now(),endtime);
         long time=duration.toMillis();
         redisUtil.addpayment(key,time);

@@ -99,11 +99,12 @@ public class PaymentController {
             // orderId:
             payment.setOrderId(OrderId);
             // paySn
-
-            String prepayId = wxPaymentService.useWxPay(payment);
+            String prepayId = JacksonUtil.parseString(wxPaymentService.useWxPay(payment),"data");
             payment.setPaySn(prepayId);
             payment.setPayChannel(inPayment.getPayChannel());
             payment.setBeginTime(inPayment.getBeginTime());
+            payment.setEndTime(inPayment.getEndTime());
+            payment.setGmtCreate(inPayment.getGmtCreate());
             // beginTime: 由数据库创建
             // endTime: 由数据库创建
 
