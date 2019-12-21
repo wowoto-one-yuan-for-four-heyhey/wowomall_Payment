@@ -5,6 +5,7 @@ import com.xmu.wowoto.payment.service.OrderService;
 import com.xmu.wowoto.payment.service.PaymentService;
 import com.xmu.wowoto.payment.service.WxPaymentService;
 import com.xmu.wowoto.payment.util.JacksonUtil;
+import com.xmu.wowoto.payment.util.RedisUtil;
 import com.xmu.wowoto.payment.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,9 @@ public class PaymentController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     /**
      * 订单模块调用此方法请求下单支付
@@ -174,6 +178,8 @@ public class PaymentController {
     @PutMapping("payment/{id}")
     public Object payPayment(@PathVariable("id") Integer id)
     {
+        if(redisUtil.hasKey(id.toString()))
+        {redisUtil.delete(id.toString());}
         Payment payment=paymentService.getPayment(id);
         String paySn=payment.getPaySn();
         wxPaymentService.requestWxPayment(paySn);

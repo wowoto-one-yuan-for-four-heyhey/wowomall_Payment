@@ -45,6 +45,15 @@ public class RedisUtil {
         return result;
     }
 
+
+    public boolean hasKey(final String key) {
+        if( redisTemplate.hasKey(key))
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 删除缓存
      * */
