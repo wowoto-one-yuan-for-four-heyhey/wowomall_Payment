@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author MedalWill
+ * @date 2019/12/14 21:13
+ */
 @Component
 public class RedisUtil {
     @Autowired

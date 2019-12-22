@@ -6,7 +6,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
+/**
+ *
+ *@author MedalWill
+ *@date 2019/12/14
+ *
+ *
+ *
+ */
 @Repository
 @Mapper
 public interface PaymentMapper {

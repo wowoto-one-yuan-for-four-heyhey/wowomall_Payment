@@ -145,88 +145,21 @@ public class Payment {
         this.beDeleted = beDeleted;
     }
 
+    @Override
     public boolean equals(final Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Payment)) return false;
-        final Payment other = (Payment) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-        final Object this$actualPrice = this.getActualPrice();
-        final Object other$actualPrice = other.getActualPrice();
-        if (this$actualPrice == null ? other$actualPrice != null : !this$actualPrice.equals(other$actualPrice))
-            return false;
-        final Object this$payChannel = this.getPayChannel();
-        final Object other$payChannel = other.getPayChannel();
-        if (this$payChannel == null ? other$payChannel != null : !this$payChannel.equals(other$payChannel))
-            return false;
-        final Object this$statusCode = this.getStatusCode();
-        final Object other$statusCode = other.getStatusCode();
-        if (this$statusCode == null ? other$statusCode != null : !this$statusCode.equals(other$statusCode))
-            return false;
-        final Object this$payTime = this.getPayTime();
-        final Object other$payTime = other.getPayTime();
-        if (this$payTime == null ? other$payTime != null : !this$payTime.equals(other$payTime)) return false;
-        final Object this$paySn = this.getPaySn();
-        final Object other$paySn = other.getPaySn();
-        if (this$paySn == null ? other$paySn != null : !this$paySn.equals(other$paySn)) return false;
-        final Object this$beginTime = this.getBeginTime();
-        final Object other$beginTime = other.getBeginTime();
-        if (this$beginTime == null ? other$beginTime != null : !this$beginTime.equals(other$beginTime)) return false;
-        final Object this$endTime = this.getEndTime();
-        final Object other$endTime = other.getEndTime();
-        if (this$endTime == null ? other$endTime != null : !this$endTime.equals(other$endTime)) return false;
-        final Object this$orderId = this.getOrderId();
-        final Object other$orderId = other.getOrderId();
-        if (this$orderId == null ? other$orderId != null : !this$orderId.equals(other$orderId)) return false;
-        final Object this$gmtCreate = this.getGmtCreate();
-        final Object other$gmtCreate = other.getGmtCreate();
-        if (this$gmtCreate == null ? other$gmtCreate != null : !this$gmtCreate.equals(other$gmtCreate)) return false;
-        final Object this$gmtModified = this.getGmtModified();
-        final Object other$gmtModified = other.getGmtModified();
-        if (this$gmtModified == null ? other$gmtModified != null : !this$gmtModified.equals(other$gmtModified))
-            return false;
-        final Object this$beDeleted = this.getBeDeleted();
-        final Object other$beDeleted = other.getBeDeleted();
-        if (this$beDeleted == null ? other$beDeleted != null : !this$beDeleted.equals(other$beDeleted)) return false;
-        return true;
+      return true;
     }
 
     protected boolean canEqual(final Object other) {
         return other instanceof Payment;
     }
 
+    @Override
     public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $id = this.getId();
-        result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-        final Object $actualPrice = this.getActualPrice();
-        result = result * PRIME + ($actualPrice == null ? 43 : $actualPrice.hashCode());
-        final Object $payChannel = this.getPayChannel();
-        result = result * PRIME + ($payChannel == null ? 43 : $payChannel.hashCode());
-        final Object $statusCode = this.getStatusCode();
-        result = result * PRIME + ($statusCode == null ? 43 : $statusCode.hashCode());
-        final Object $payTime = this.getPayTime();
-        result = result * PRIME + ($payTime == null ? 43 : $payTime.hashCode());
-        final Object $paySn = this.getPaySn();
-        result = result * PRIME + ($paySn == null ? 43 : $paySn.hashCode());
-        final Object $beginTime = this.getBeginTime();
-        result = result * PRIME + ($beginTime == null ? 43 : $beginTime.hashCode());
-        final Object $endTime = this.getEndTime();
-        result = result * PRIME + ($endTime == null ? 43 : $endTime.hashCode());
-        final Object $orderId = this.getOrderId();
-        result = result * PRIME + ($orderId == null ? 43 : $orderId.hashCode());
-        final Object $gmtCreate = this.getGmtCreate();
-        result = result * PRIME + ($gmtCreate == null ? 43 : $gmtCreate.hashCode());
-        final Object $gmtModified = this.getGmtModified();
-        result = result * PRIME + ($gmtModified == null ? 43 : $gmtModified.hashCode());
-        final Object $beDeleted = this.getBeDeleted();
-        result = result * PRIME + ($beDeleted == null ? 43 : $beDeleted.hashCode());
-        return result;
+        return 0;
     }
 
+    @Override
     public String toString() {
         return "Payment(id=" + this.getId() + ", actualPrice=" + this.getActualPrice() + ", payChannel=" + this.getPayChannel() + ", statusCode=" + this.getStatusCode() + ", payTime=" + this.getPayTime() + ", paySn=" + this.getPaySn() + ", beginTime=" + this.getBeginTime() + ", endTime=" + this.getEndTime() + ", orderId=" + this.getOrderId() + ", gmtCreate=" + this.getGmtCreate() + ", gmtModified=" + this.getGmtModified() + ", beDeleted=" + this.getBeDeleted() + ")";
     }

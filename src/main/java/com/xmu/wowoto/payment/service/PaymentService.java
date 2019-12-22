@@ -12,12 +12,49 @@ import java.util.List;
 *
 *
 */
+
 public interface PaymentService {
 
+    /**
+     * addPayment
+     *
+     * @param payment
+     * @return
+     */
     Integer addPayment(Payment payment);
+    /**
+     * addPayment
+     *
+     * @param id
+     * @return
+     */
     Integer deletePayment(Integer id);
+    /**
+     * addPayment
+     *
+     * @param payment
+     * @return
+     */
     Integer updatePayment(Payment payment);
+    /**
+     * addPayment
+     *
+     * @param id
+     * @return
+     */
     Payment getPayment(Integer id);
+    /**
+     * addPayment
+     *
+     * @param paySn
+     * @return
+     */
     Payment getPaymentByPaySn(String paySn);
+    /**
+     * addPayment
+     *
+     * @param orderId
+     * @return
+     */
     List<Payment> getPaymentByOrderId(Integer orderId);
 }

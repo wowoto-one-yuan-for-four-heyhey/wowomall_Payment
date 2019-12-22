@@ -76,9 +76,9 @@ public class PaymentController {
             // id: 由数据库自动生成
             payment.setActualPrice(inPayment.getActualPrice());
             // payChannel
-            Integer OrderId = inPayment.getOrderId();
+            Integer orderId = inPayment.getOrderId();
 
-            List<Payment> tempPaymentList = paymentService.getPaymentByOrderId(OrderId);
+            List<Payment> tempPaymentList = paymentService.getPaymentByOrderId(orderId);
             int tempPaymentListSize;
             tempPaymentListSize = tempPaymentList.size();
             Payment tempPayment=new Payment();
@@ -88,7 +88,8 @@ public class PaymentController {
             if(tempPaymentListSize == 1){
                 tempPayment = tempPaymentList.get(0);
             }
-            if(tempPaymentListSize == 2){
+            Integer num = 2;
+            if(tempPaymentListSize == num){
                 if(tempPaymentList.get(0).getBeginTime().isBefore(tempPaymentList.get(1).getBeginTime())){
                     tempPayment = tempPaymentList.get(1);
                 }
@@ -101,7 +102,7 @@ public class PaymentController {
 
             // payTime: wxpayment模块的refund()函数调用payment模块的updatePayment()方法修改
             // orderId:
-            payment.setOrderId(OrderId);
+            payment.setOrderId(orderId);
             // paySn
             String prepayId = JacksonUtil.parseString(wxPaymentService.useWxPay(payment),"data");
             payment.setPaySn(prepayId);

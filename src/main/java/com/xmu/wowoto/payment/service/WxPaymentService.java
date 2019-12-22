@@ -30,12 +30,12 @@ public interface WxPaymentService {
      * @author Zach
      * @date 2019/12/15
      *
-     * @param prepay_id 预支付标识
+     * @param prepayId 预支付标识
      * @return
      */
 
     @PutMapping("wxpayment/{id}")
-    Object requestWxPayment(@PathVariable("id") String prepay_id);
+    Object requestWxPayment(@PathVariable("id") String prepayId);
 
     /**
      * 退款

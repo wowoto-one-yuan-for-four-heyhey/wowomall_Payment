@@ -2,6 +2,14 @@ package com.xmu.wowoto.payment.controller.vo;
 
 import java.math.BigDecimal;
 
+/**
+ *
+ *@author MedalWill
+ *@date 2019/12/14
+ *
+ *
+ *
+ */
 public class WxPaymentVo {
     private BigDecimal actualPrice;
 
